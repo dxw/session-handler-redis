@@ -1,0 +1,24 @@
+{
+    "name": "dxw/session-handler-redis",
+    "homepage": "https://github.com/dxw/session-handler-redis",
+    "version": "0.1.0",
+    "license": "MIT",
+    "config": {
+      "platform": {
+        "php": "7.4"
+      }
+    },
+    "autoload": {
+        "psr-4": {
+            "SessionHandlerRedis\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "dxw/php-cs-fixer-config": "^1.0",
+        "kahlan/kahlan": "^4.7",
+        "vimeo/psalm": "^4.0"
+    }
+}
