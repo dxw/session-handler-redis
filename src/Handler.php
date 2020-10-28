@@ -56,7 +56,12 @@ class Handler implements \SessionHandlerInterface
     /** @param string $sessionId */
     public function read($sessionId) : string
     {
-        return $this->client->hget('data', $sessionId);
+        $value = $this->client->hget('data', $sessionId);
+        if ($value === null) {
+            return '';
+        }
+
+        return $value;
     }
 
     /**

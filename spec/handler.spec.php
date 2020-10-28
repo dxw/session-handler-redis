@@ -71,10 +71,19 @@ describe(Handler::class, function () {
     });
 
     describe('->read()', function () {
-        it('returns the appropriate value', function () {
-            allow($this->client)->toReceive('hget')->with('data', 'session123')->andReturn('PHP_SERIALIZED_STUFF');
-            $return = $this->handler->read('session123');
-            expect($return)->toBe('PHP_SERIALIZED_STUFF');
+        context('the value is unset', function () {
+            it('returns the empty string', function () {
+                allow($this->client)->toReceive('hget')->with('data', 'session123')->andReturn(null);
+                $return = $this->handler->read('session123');
+                expect($return)->toBe('');
+            });
+        });
+        context('the value is set', function () {
+            it('returns the appropriate value', function () {
+                allow($this->client)->toReceive('hget')->with('data', 'session123')->andReturn('PHP_SERIALIZED_STUFF');
+                $return = $this->handler->read('session123');
+                expect($return)->toBe('PHP_SERIALIZED_STUFF');
+            });
         });
     });
 
