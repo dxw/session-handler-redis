@@ -9,12 +9,26 @@ describe(Handler::class, function () {
         $this->client = Double::instance([
             'extends' => \Predis\Client::class,
         ]);
+        allow($this->client)->toReceive('connect');
 
         $this->handler = new Handler($this->client);
     });
 
     it('is a SessionHandlerInterface', function () {
         expect($this->handler)->toBeAnInstanceOf(\SessionHandlerInterface::class);
+    });
+
+    describe('->__construct()', function () {
+        it("should throw an exception if the redis connection doesn't work", function () {
+            $exception = new \Predis\Connection\ConnectionException(Double::instance(['implements' => \Predis\Connection\NodeConnectionInterface::class]));
+            allow($this->client)->toReceive('connect')->with()->andRun(function () use ($exception) {
+                throw $exception;
+            });
+
+            expect(function () {
+                new Handler($this->client);
+            })->toThrow($exception);
+        });
     });
 
     describe('->close()', function () {

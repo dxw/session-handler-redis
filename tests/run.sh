@@ -22,6 +22,11 @@ run_tests() {
   test "${ANIMAL}" = dog
   echo "✅ write/read"
 
+  reset_cookies
+  PASS=$(fetch "constructor-should-throw-exception.php?handler=$HANDLER")
+  test "$PASS" = PASS
+  echo "✅ constructor-should-throw-exception.php"
+
   echo "All tests pass for '$HANDLER' handler!"
 }
 

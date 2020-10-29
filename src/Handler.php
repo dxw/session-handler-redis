@@ -10,6 +10,7 @@ class Handler implements \SessionHandlerInterface
     public function __construct(\Predis\Client $client)
     {
         $this->client = $client;
+        $this->client->connect();
     }
 
     public function close() : bool
