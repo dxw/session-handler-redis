@@ -34,6 +34,12 @@ run_tests() {
   test "$PASS" = PASS
   echo "✅ constructor-should-throw-exception.php"
 
+  reset_cookies
+  ID=$(fetch "id.php?handler=$HANDLER")
+  PASS=$(echo "$ID" | perl -pe 's/^[0-9a-f]{32}$/PASS/')
+  test "$PASS" = PASS
+  echo "✅ id"
+
   echo "All tests pass for '$HANDLER' handler!"
 }
 
