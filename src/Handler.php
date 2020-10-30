@@ -10,6 +10,7 @@ class Handler implements \SessionHandlerInterface
     public function __construct(\Predis\Client $client)
     {
         $this->client = $client;
+        $this->client->connect();
     }
 
     public function close() : bool
@@ -56,7 +57,12 @@ class Handler implements \SessionHandlerInterface
     /** @param string $sessionId */
     public function read($sessionId) : string
     {
-        return $this->client->hget('data', $sessionId);
+        $value = $this->client->hget('data', $sessionId);
+        if ($value === null) {
+            return '';
+        }
+
+        return $value;
     }
 
     /**
