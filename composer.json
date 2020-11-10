@@ -3,18 +3,13 @@
     "homepage": "https://github.com/dxw/session-handler-redis",
     "version": "0.1.0",
     "license": "MIT",
-    "config": {
-      "platform": {
-        "php": "7.4"
-      }
-    },
     "autoload": {
         "psr-4": {
             "SessionHandlerRedis\\": "src/"
         }
     },
     "require": {
-        "php": "^7.4",
+        "php": "^7.2",
         "predis/predis": "^1.1"
     },
     "require-dev": {
