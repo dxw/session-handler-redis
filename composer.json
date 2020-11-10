@@ -1,7 +1,6 @@
 {
     "name": "dxw/session-handler-redis",
     "homepage": "https://github.com/dxw/session-handler-redis",
-    "version": "0.1.0",
     "license": "MIT",
     "autoload": {
         "psr-4": {
