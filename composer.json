@@ -13,7 +13,7 @@
     },
     "require-dev": {
         "dxw/php-cs-fixer-config": "^2.0",
-        "kahlan/kahlan": "^4.7",
-        "vimeo/psalm": "^4.0"
+        "kahlan/kahlan": "^5.2",
+        "vimeo/psalm": "^5.14"
     }
 }
