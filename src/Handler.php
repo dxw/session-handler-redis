@@ -22,13 +22,13 @@ class Handler implements \SessionHandlerInterface
 	/** @param string $sessionId */
 	public function destroy($sessionId): bool
 	{
-		$this->client->hdel('lastupdated', $sessionId);
-		$this->client->hdel('data', $sessionId);
+		$this->client->hdel('lastupdated', [$sessionId]);
+		$this->client->hdel('data', [$sessionId]);
 		return true;
 	}
 
 	/** @param int $maxLifetime */
-	public function gc($maxLifetime): bool
+	public function gc($maxLifetime): int
 	{
 		$sessions = $this->client->hgetall('lastupdated');
 		$cutoff = $this->getTimestamp(-$maxLifetime);
@@ -39,8 +39,7 @@ class Handler implements \SessionHandlerInterface
 			}
 		}
 
-		$this->client->hdel('lastupdated', ...$toDelete);
-		return true;
+		return ($this->client->hdel('lastupdated', $toDelete));
 	}
 
 	/**
@@ -85,6 +84,12 @@ class Handler implements \SessionHandlerInterface
 		$currentTime = (new \DateTimeImmutable(date('c')));
 		$currentTimeUtc = $currentTime->setTimezone(new \DateTimeZone('Etc/UTC'));
 		$offsettedTime = $currentTimeUtc->modify("$offset second");
-		return $offsettedTime->format('c');
+		// In theory we could get a false value here, but it's hard to see it ever happening
+		// If it does, we probably want to fail loudly
+		if ($offsettedTime === false) {
+			throw new \UnexpectedValueException("Unable to produce datetime with given offset");
+		} else {
+			return $offsettedTime->format('c');
+		}
 	}
 }

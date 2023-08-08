@@ -43,8 +43,8 @@ describe(Handler::class, function () {
 	describe('->destroy()', function () {
 		it('calls HDEL and returns true', function () {
 			allow($this->client)->toReceive('hdel');
-			expect($this->client)->toReceive('hdel')->with('lastupdated', 'session123');
-			expect($this->client)->toReceive('hdel')->with('data', 'session123');
+			expect($this->client)->toReceive('hdel')->with('lastupdated', ['session123']);
+			expect($this->client)->toReceive('hdel')->with('data', ['session123']);
 			$return = $this->handler->destroy('session123');
 			expect($return)->toBe(true);
 		});
@@ -63,17 +63,21 @@ describe(Handler::class, function () {
 		});
 
 		it('deletes sessions older than 5 seconds', function () {
-			allow($this->client)->toReceive('hdel');
-			expect($this->client)->toReceive('hdel')->with('lastupdated', 'session456', 'session789');
+			allow($this->client)->toReceive('hdel')->andRun(function ($hashKey, $fields) {
+				return count($fields);
+			});
+			expect($this->client)->toReceive('hdel')->with('lastupdated', ['session456', 'session789']);
 			$return = $this->handler->gc(5);
-			expect($return)->toBe(true);
+			expect($return)->toBe(2);
 		});
 
 		it('deletes sessions older than 15 seconds', function () {
-			allow($this->client)->toReceive('hdel');
-			expect($this->client)->toReceive('hdel')->with('lastupdated', 'session789');
+			allow($this->client)->toReceive('hdel')->andRun(function ($hashKey, $fields) {
+				return count($fields);
+			});
+			expect($this->client)->toReceive('hdel')->with('lastupdated', ['session789']);
 			$return = $this->handler->gc(15);
-			expect($return)->toBe(true);
+			expect($return)->toBe(1);
 		});
 	});
 
