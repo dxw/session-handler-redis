@@ -21,3 +21,9 @@ vendor/bin/psalm
 
 echo "==> Running unit tests..."
 vendor/bin/kahlan
+
+if [ -z $CI ]; then
+  echo "==> Running integration tests..."
+  docker-compose --file tests/docker-compose.yml run tests
+  docker-compose -f tests/docker-compose.yml down
+fi
