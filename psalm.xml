@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<psalm>
+<psalm
+  findUnusedCode="false"
+  findUnusedBaselineEntry="true">
   <projectFiles>
     <directory name="src"/>
   </projectFiles>
