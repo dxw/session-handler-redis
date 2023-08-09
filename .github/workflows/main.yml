@@ -3,21 +3,15 @@ name: Main tests
 on: push
 
 jobs:
-  kahlan:
+  tests:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: ['7.4', '8.1', '8.2']
     steps:
-      - uses: actions/checkout@v2
-      - run: composer install --no-interaction
-      - run: vendor/bin/kahlan
-  psalm:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - run: composer install --no-interaction
-      - run: vendor/bin/psalm
-  php-cs-fixer:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - run: composer install --no-interaction
-      - run: vendor/bin/php-cs-fixer fix --dry-run -v --diff
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - run: script/test

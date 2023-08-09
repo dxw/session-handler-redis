@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# script/test: Run the test suite for the package
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -n "$DEBUG" ]; then
+  set -x
+fi
+
+echo "==> Updating..."
+script/update
+
+echo "==> Running linter..."
+vendor/bin/php-cs-fixer fix --dry-run -v --diff
+
+echo "==> Running static code analysis..."
+vendor/bin/psalm
+
+echo "==> Running unit tests..."
+vendor/bin/kahlan
+
+if [ -z $CI ]; then
+  echo "==> Running integration tests..."
+  docker-compose --file tests/docker-compose.yml run tests
+  docker-compose -f tests/docker-compose.yml down
+fi

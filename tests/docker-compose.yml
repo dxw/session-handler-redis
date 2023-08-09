@@ -1,8 +1,20 @@
 version: "3"
 
 services:
-  php:
-    image: php:7.2-apache
+  php74:
+    image: php:7.4-apache
+    volumes:
+      - ..:/var/www/html/
+    depends_on:
+      - redis
+  php81:
+    image: php:8.1-apache
+    volumes:
+      - ..:/var/www/html/
+    depends_on:
+      - redis
+  php82:
+    image: php:8.2-apache
     volumes:
       - ..:/var/www/html/
     depends_on:
@@ -17,4 +29,6 @@ services:
     working_dir: /app
     command: tests/run.sh
     depends_on:
-      - php
+      - php74
+      - php81
+      - php82
